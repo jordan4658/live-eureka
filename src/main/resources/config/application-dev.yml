@@ -1,0 +1,79 @@
+spring:
+  application:
+    name: live-eureka
+  main:
+    allow-bean-definition-overriding: true
+server:
+  port: 9999
+eureka:
+  server:
+    peer-node-read-timeout-ms: 3000 # 集群节点之间读取超时时间。单位：毫秒
+    enable-self-preservation: false #Eureka会统计最近15分钟所有的服务的爽约比列，超过85%（生产环境下因为网络原因及其有可能造成这么局面），Eureka此时并不会将服务给剔除，而是将其保护起来，生产环境下作用还是很明显，起码不会因为网络原因导致大部分服务爽约，Eureka将全部服务剔除的局面出现
+  client:
+    #eureka中注册自己
+    registerWithEureka: true
+    #该项目是服务端,不用拉取服务 
+    fetchRegistry: false
+    serviceUrl:
+      #测试环境
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+    #allow-redirects: 
+  instance:
+    hostname: localhost
+    prefer-ip-address: true #当其它服务获取地址时提供ip而不是hostname
+    ip-address: 127.0.0.1 #指定自己的ip信息，不指定的话会自己寻找(服務器都是內網ip可以不用設置,eureka無法獲取服務器外網ip)
+    #non-secure-port=本服务自己的端口
+    lease-renewal-interval-in-seconds: 10 #每隔30秒一个心跳
+    lease-expiration-duration-in-seconds: 30 #90秒没有动静，认为服务提供者宕机了
+    health-check-url-path: /actuator/health
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+logging:
+  level:
+    org.springframework.http.server.reactive: INFO
+    org.springframework.web.reactive: INFO
+    com.caipiao.live: DEBUG
+    reactor.ipc.netty: INFO
+    io.lettuce.core.protocol: ERROR
+    org.mongodb.driver.cluster: ERROR
+    com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver: ERROR
+
+
+#============================================ceshi===========
+#阿里短信
+dx.appkey: LTAII6VhYzdhi15w
+dx.appsecret: UHhfKtLv37bVeWB3nbv5BE1CZINTwV
+dx.signname: 秀懂科技
+dx.tegister_template_code: SMS_143705310
+dx.update_password_template_code: SMS_143705310
+dx.update_phone_template_code: SMS_150738374
+
+#极光短信
+jgdx.appkey: 956cc08ee28301a398d0ae0d
+jgdx.appsecret: 1db01c7d09ec6f52b5658669
+jgdx.sign_id: 13643
+jgdx.default_code: 1
+jgdx.tegister_template_code: 159393
+jgdx.update_password_template_code: 159394
+jgdx.update_phone_template_code: 159395
+
+#云之讯短信
+cf.appId: fc72fd2c831f41ed9ccb6e1a1af1863c
+cf.sid: 2d546d6d94fbf98c129c0d98d25c6d30
+cf.token: 27e541e6b474f1cc1892e7107f644018
+cf.url: https://open.ucpaas.com/ol/sms/sendsms
+cf.templateid: 438481
+cf.cloudRegisterTempl: 438481
+cf.cloudResetCodeTempl: 438482
+cf.cloudResetNumTempl: 438483
+
+sms.order.ali: 4
+sms.order.jg: 1
+sms.order.yzx: 3
